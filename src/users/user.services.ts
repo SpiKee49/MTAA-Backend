@@ -1,6 +1,7 @@
+import { addAlbum } from '../albums/album.services';
 import { db } from '../utils/db.server';
 
-type User = {
+export type User = {
   id: string;
   username: string;
   profileName: string;
@@ -8,10 +9,24 @@ type User = {
   password: string;
 };
 
-export const listAllUsers = async (): Promise<
-  Omit<User, 'password'>[]
-> => {
+export const listAllUsers = async (
+  search?: string
+): Promise<Omit<User, 'password'>[]> => {
   return db.user.findMany({
+    where: {
+      ...(search
+        ? {
+            OR: {
+              profileName: {
+                contains: search,
+              },
+              username: {
+                contains: search,
+              },
+            },
+          }
+        : {}),
+    },
     select: {
       id: true,
       username: true,
@@ -35,7 +50,36 @@ export const findUser = async (
       profileName: true,
       email: true,
     },
+    include: {
+      followedAlbums: true,
+      pinnedAlbum: true,
+      friends: true,
+    },
   });
+};
+
+export const loginUser = async (
+  username: string,
+  password: string
+): Promise<User | null> => {
+  const user = await db.user.findUnique({
+    where: {
+      username,
+    },
+    select: {
+      id: true,
+      username: true,
+      profileName: true,
+      email: true,
+      password: true,
+    },
+  });
+
+  if (user == null || user.password !== password) {
+    return null;
+  }
+
+  return user;
 };
 
 export const addUser = async (
@@ -78,6 +122,27 @@ export const updateUser = async (
       username: true,
       profileName: true,
       email: true,
+    },
+  });
+};
+
+export const followAlbum = async (
+  id: string,
+  albumId: number
+): Promise<Omit<User, 'password'>> => {
+  return db.user.update({
+    where: {
+      id,
+    },
+    data: {
+      followedAlbums: {
+        connect: {
+          id: albumId,
+        },
+      },
+    },
+    include: {
+      followedAlbums: true,
     },
   });
 };

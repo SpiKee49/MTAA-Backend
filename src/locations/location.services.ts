@@ -7,10 +7,21 @@ type Location = {
   latitude: string;
 };
 
-export const listAllLocations = async (): Promise<
-  Location[]
-> => {
-  return db.location.findMany();
+export const listAllLocations = async (
+  search?: string
+): Promise<Location[]> => {
+  return db.location.findMany({
+    where: {
+      ...(search
+        ? {
+            name: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          }
+        : {}),
+    },
+  });
 };
 
 export const findLocation = async (
@@ -19,6 +30,9 @@ export const findLocation = async (
   return db.location.findUnique({
     where: {
       id,
+    },
+    include: {
+      posts: true,
     },
   });
 };

@@ -1,7 +1,11 @@
 import * as LocationServices from './location.services';
 
 import { Request, Response } from 'express';
-import { body, validationResult } from 'express-validator';
+import {
+  body,
+  param,
+  validationResult,
+} from 'express-validator';
 
 import express from 'express';
 
@@ -10,10 +14,13 @@ export const locationRouter = express.Router();
 //GET: all Locations
 locationRouter.get(
   '/',
+  param('search').isString(),
   async (req: Request, res: Response) => {
     try {
       const locations =
-        await LocationServices.listAllLocations();
+        await LocationServices.listAllLocations(
+          req.params.search
+        );
       return res.status(200).json(locations);
     } catch (err) {
       return res.status(500).json(err);
