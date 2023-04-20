@@ -33,7 +33,7 @@ model User {
   profileName    String   @db.VarChar(50)
   profilePic     Bytes?   @db.ByteA
   friends        String[]
-  Post           Post[]
+  posts          Post[]
   followedAlbums Album[]  @relation("followedAlbums")
   ownedAlbums    Album[]  @relation("ownedAlbums")
   pinnedAlbum    Album?   @relation("pinned", fields: [pinnedAlbumId], references: [id])
@@ -48,7 +48,7 @@ model Album {
   description    String?
   owner          User     @relation("ownedAlbums", fields: [ownerId], references: [id])
   ownerId        String
-  Post           Post[]
+  posts          Post[]
   pinnedBy       User[]   @relation("pinned")
   followingUsers User[]   @relation("followedAlbums")
 }
@@ -58,5 +58,5 @@ model Location {
   name      String @unique
   longitude String
   latitude  String
-  Post      Post[]
+  posts     Post[]
 }
