@@ -12,7 +12,9 @@ albumRouter.get(
   '/',
   async (req: Request, res: Response) => {
     try {
-      const albums = await AlbumServices.listAllAlbums();
+      const albums = await AlbumServices.listAllAlbums(
+        req.query.search?.toString()
+      );
       return res.status(200).json(albums);
     } catch (err) {
       return res.status(500).json(err);

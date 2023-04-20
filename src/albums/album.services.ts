@@ -1,3 +1,4 @@
+import { User } from '../users/user.services';
 import { db } from '../utils/db.server';
 
 type Album = {
@@ -8,8 +9,34 @@ type Album = {
   tags?: string[];
 };
 
-export const listAllAlbums = async (): Promise<Album[]> => {
+interface AlbumDetail extends Album {
+  followingUsers: User[];
+}
+
+export const listAllAlbums = async (
+  search?: string
+): Promise<Album[]> => {
   return db.album.findMany({
+    where: {
+      ...(search
+        ? {
+            OR: [
+              {
+                title: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                description: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+            ],
+          }
+        : {}),
+    },
     select: {
       id: true,
       title: true,
@@ -22,10 +49,34 @@ export const listAllAlbums = async (): Promise<Album[]> => {
 
 export const findAlbum = async (
   id: number
-): Promise<Album | null> => {
+): Promise<AlbumDetail | null> => {
   return db.album.findUnique({
     where: {
       id,
+    },
+    select: {
+      id: true,
+      description: true,
+      ownerId: true,
+      title: true,
+      followingUsers: true,
+    },
+  });
+};
+
+export const searchAlbum = async (
+  value: string
+): Promise<Album[] | null> => {
+  return db.album.findMany({
+    where: {
+      title: {
+        contains: value,
+      },
+      OR: {
+        description: {
+          contains: value,
+        },
+      },
     },
   });
 };
