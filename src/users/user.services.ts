@@ -44,12 +44,6 @@ export const findUser = async (
     where: {
       id,
     },
-    select: {
-      id: true,
-      username: true,
-      profileName: true,
-      email: true,
-    },
     include: {
       followedAlbums: true,
       pinnedAlbum: true,
