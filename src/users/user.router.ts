@@ -72,6 +72,30 @@ userRouter.put(
   }
 );
 
+//POST: Like post
+userRouter.put(
+  '/:id/like',
+  param('id').isUUID(),
+  body('postId').isNumeric(),
+  async (req: Request, res: Response) => {
+    const userId: string = req.params.id;
+
+    try {
+      const user = await UserService.likePost(
+        userId,
+        Number(req.body.postId)
+      );
+      if (user) {
+        return res.status(200).json(user);
+      }
+
+      return res.status(404).json('User not found');
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+  }
+);
+
 //POST: Login
 userRouter.post(
   '/login',

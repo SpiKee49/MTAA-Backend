@@ -22,7 +22,7 @@ model Post {
   albumId     Int
   location    Location @relation(fields: [locationId], references: [id])
   locationId  Int
-  likedBy     User[]   @relation("likedBy")
+  likedBy     User[]   @relation("likes")
 }
 
 model User {
@@ -34,7 +34,7 @@ model User {
   profileName    String   @db.VarChar(50)
   profilePic     Bytes?   @db.ByteA
   friendedBy     User[]   @relation("friends")
-  likedPosts     Post[]   @relation("likedBy")
+  likedPosts     Post[]   @relation("likes")
   posts          Post[]
   followedAlbums Album[]  @relation("followedAlbums")
   ownedAlbums    Album[]  @relation("ownedAlbums")

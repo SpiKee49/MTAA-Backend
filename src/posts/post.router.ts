@@ -1,9 +1,14 @@
 import * as PostServices from './post.services';
 
 import { Request, Response } from 'express';
-import { body, validationResult } from 'express-validator';
+import {
+  body,
+  param,
+  validationResult,
+} from 'express-validator';
 
 import express from 'express';
+import { followAlbum } from '../users/user.services';
 
 export const postRouter = express.Router();
 
@@ -64,7 +69,7 @@ postRouter.post(
   }
 );
 
-//POST: Update Post
+//PUT: Update Post
 //Params title,photo,description,userId,albumId,locationId,
 postRouter.put(
   '/:id',

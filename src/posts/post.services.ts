@@ -21,6 +21,12 @@ export const findPost = async (
     where: {
       id,
     },
+    include: {
+      location: true,
+      album: true,
+      user: true,
+      likedBy: true,
+    },
   });
 };
 

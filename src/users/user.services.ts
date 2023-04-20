@@ -141,6 +141,27 @@ export const followAlbum = async (
   });
 };
 
+export const likePost = async (
+  id: string,
+  postId: number
+): Promise<Omit<User, 'password'>> => {
+  return db.user.update({
+    where: {
+      id,
+    },
+    data: {
+      likedPosts: {
+        connect: {
+          id: postId,
+        },
+      },
+    },
+    include: {
+      likedPosts: true,
+    },
+  });
+};
+
 export const deleteUser = async (
   id: string
 ): Promise<void> => {
