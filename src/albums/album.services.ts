@@ -49,17 +49,14 @@ export const listAllAlbums = async (
 
 export const findAlbum = async (
   id: number
-): Promise<AlbumDetail | null> => {
+): Promise<Album | null> => {
   return db.album.findUnique({
     where: {
       id,
     },
-    select: {
-      id: true,
-      description: true,
-      ownerId: true,
-      title: true,
+    include: {
       followingUsers: true,
+      posts: true,
     },
   });
 };

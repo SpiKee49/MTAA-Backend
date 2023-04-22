@@ -1,4 +1,3 @@
-import { addAlbum } from '../albums/album.services';
 import { db } from '../utils/db.server';
 
 export type User = {
@@ -48,6 +47,7 @@ export const findUser = async (
       followedAlbums: true,
       pinnedAlbum: true,
       friends: true,
+      likedPosts: true,
     },
   });
 };
@@ -60,12 +60,10 @@ export const loginUser = async (
     where: {
       username,
     },
-    select: {
-      id: true,
-      username: true,
-      profileName: true,
-      email: true,
-      password: true,
+    include: {
+      likedPosts: true,
+      friends: true,
+      followedAlbums: true,
     },
   });
 

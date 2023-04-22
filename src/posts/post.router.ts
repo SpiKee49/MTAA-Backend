@@ -21,6 +21,21 @@ postRouter.get('/', async (req: Request, res: Response) => {
     return res.status(500).json(err);
   }
 });
+//GET: Number of likes on post
+postRouter.get(
+  '/:id/likes',
+  param('id').isNumeric(),
+  async (req: Request, res: Response) => {
+    try {
+      const likes = await PostServices.postLikeNumber(
+        parseInt(req.params.id, 10)
+      );
+      return res.status(200).json(likes);
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+  }
+);
 
 //GET: Find single Post by it's id
 postRouter.get(

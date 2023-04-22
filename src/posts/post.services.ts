@@ -50,6 +50,19 @@ export const updatePost = async (
   });
 };
 
+export const postLikeNumber = async (
+  id: number
+): Promise<number | null> => {
+  const data = await db.post.findUnique({
+    where: {
+      id,
+    },
+    include: { likedBy: true },
+  });
+
+  return data?.likedBy.length ?? null;
+};
+
 export const deletePost = async (
   id: number
 ): Promise<void> => {
