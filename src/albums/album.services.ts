@@ -79,10 +79,13 @@ export const searchAlbum = async (
 };
 
 export const addAlbum = async (
-  album: Album
+  album: Omit<Album, 'id'>
 ): Promise<Album> => {
   const { title, description, tags, ownerId } = album;
   return db.album.create({
+    include: {
+      owner: true,
+    },
     data: {
       title,
       description,

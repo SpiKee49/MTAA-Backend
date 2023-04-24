@@ -143,15 +143,37 @@ export const likePost = async (
   id: string,
   postId: number
 ): Promise<Omit<User, 'password'>> => {
+  const user = await db.user.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      likedPosts: true,
+    },
+  });
+
+  const alreadyLiked =
+    user?.likedPosts
+      .map(item => item.id)
+      .includes(postId) ?? false;
+
   return db.user.update({
     where: {
       id,
     },
     data: {
       likedPosts: {
-        connect: {
-          id: postId,
-        },
+        ...(!alreadyLiked
+          ? {
+              connect: {
+                id: postId,
+              },
+            }
+          : {
+              disconnect: {
+                id: postId,
+              },
+            }),
       },
     },
     include: {
