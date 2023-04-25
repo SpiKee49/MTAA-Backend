@@ -1,7 +1,11 @@
 import * as AlbumServices from './album.services';
 
 import { Request, Response } from 'express';
-import { body, validationResult } from 'express-validator';
+import {
+  body,
+  query,
+  validationResult,
+} from 'express-validator';
 
 import express from 'express';
 
@@ -10,6 +14,7 @@ export const albumRouter = express.Router();
 //GET: all Albums
 albumRouter.get(
   '/',
+  query('search').isString().optional(),
   async (req: Request, res: Response) => {
     try {
       const albums = await AlbumServices.listAllAlbums(

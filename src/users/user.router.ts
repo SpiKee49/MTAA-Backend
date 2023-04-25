@@ -9,6 +9,7 @@ import {
 } from 'express-validator';
 
 import express from 'express';
+import { isAuthenticated } from '../midlewares';
 
 export const userRouter = express.Router();
 
@@ -32,6 +33,7 @@ userRouter.get(
 userRouter.get(
   '/:id',
   param('id').isUUID(),
+  isAuthenticated,
   async (req: Request, res: Response) => {
     const userId: string = req.params.id;
 
@@ -77,6 +79,7 @@ userRouter.put(
   '/:id/like',
   param('id').isUUID(),
   body('postId').isNumeric(),
+  isAuthenticated,
   async (req: Request, res: Response) => {
     const userId: string = req.params.id;
 
@@ -90,33 +93,6 @@ userRouter.put(
       }
 
       return res.status(404).json('User not found');
-    } catch (err) {
-      return res.status(500).json(err);
-    }
-  }
-);
-
-//POST: Login
-userRouter.post(
-  '/login',
-  body('username').isString(),
-  body('password').isString(),
-  async (req: Request, res: Response) => {
-    const { username, password } = req.body;
-
-    try {
-      const user = await UserService.loginUser(
-        username,
-        password
-      );
-      if (user) {
-        const { password, ...rest } = user;
-        return res.status(200).json(rest);
-      }
-
-      return res
-        .status(404)
-        .json("Email or password don't match");
     } catch (err) {
       return res.status(500).json(err);
     }

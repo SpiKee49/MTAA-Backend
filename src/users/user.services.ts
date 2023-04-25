@@ -51,6 +51,15 @@ export const findUser = async (
     },
   });
 };
+export const findUserByUsername = async (
+  username: string
+): Promise<User | null> => {
+  return db.user.findUnique({
+    where: {
+      username,
+    },
+  });
+};
 
 export const loginUser = async (
   username: string,

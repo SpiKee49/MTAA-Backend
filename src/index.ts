@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 
 import { albumRouter } from './albums/album.router';
+import { authRouter } from './auth/auth.router';
 import cors from 'cors';
 import express from 'express';
 import { locationRouter } from './locations/location.router';
@@ -25,6 +26,7 @@ app.use('/api/users', userRouter);
 app.use('/api/locations', locationRouter);
 app.use('/api/albums', albumRouter);
 app.use('/api/posts', postRouter);
+app.use('/api/auth', authRouter);
 
 app.listen(PORT, () =>
   console.log(`App listening on port ${PORT}!`)

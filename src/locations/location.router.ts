@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import {
   body,
   param,
+  query,
   validationResult,
 } from 'express-validator';
 
@@ -14,12 +15,12 @@ export const locationRouter = express.Router();
 //GET: all Locations
 locationRouter.get(
   '/',
-  param('search').isString(),
+  query('search').isString().optional(),
   async (req: Request, res: Response) => {
     try {
       const locations =
         await LocationServices.listAllLocations(
-          req.params.search
+          req.query.search?.toString()
         );
       return res.status(200).json(locations);
     } catch (err) {
