@@ -26,22 +26,24 @@ model Post {
 }
 
 model User {
-  id             String         @id @default(uuid())
-  createdAt      DateTime       @default(now())
-  username       String         @unique @db.VarChar(20)
-  email          String         @unique
+  id             String          @id @default(uuid())
+  createdAt      DateTime        @default(now())
+  username       String          @unique @db.VarChar(20)
+  email          String          @unique
   password       String
-  profileName    String         @db.VarChar(50)
-  profilePic     Bytes?         @db.ByteA
-  friendedBy     User[]         @relation("friends")
-  likedPosts     Post[]         @relation("likes")
+  profileName    String          @db.VarChar(50)
+  profilePic     Bytes?          @db.ByteA
+  friendedBy     User[]          @relation("friends")
+  likedPosts     Post[]          @relation("likes")
   posts          Post[]
-  followedAlbums Album[]        @relation("followedAlbums")
-  ownedAlbums    Album[]        @relation("ownedAlbums")
-  pinnedAlbum    Album?         @relation("pinned", fields: [pinnedAlbumId], references: [id])
+  followedAlbums Album[]         @relation("followedAlbums")
+  ownedAlbums    Album[]         @relation("ownedAlbums")
+  pinnedAlbum    Album?          @relation("pinned", fields: [pinnedAlbumId], references: [id])
   pinnedAlbumId  Int?
-  friends        User[]         @relation("friends")
+  friends        User[]          @relation("friends")
   refreshTokens  RefreshToken[]
+  requestsFrom   FriendRequest[] @relation("requestsFrom")
+  requestsTo     FriendRequest[] @relation("requestsTo")
 }
 
 model Album {
@@ -73,4 +75,14 @@ model RefreshToken {
   revoked     Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model FriendRequest {
+  id        Int      @id @default(autoincrement())
+  fromUser  User     @relation("requestsFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  fromId    String
+  toUser    User     @relation("requestsTo", fields: [toId], references: [id], onDelete: Cascade)
+  toId      String
+  createdAt DateTime @default(now())
+  revoked   Boolean?
 }
