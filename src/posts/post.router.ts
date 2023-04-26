@@ -8,7 +8,7 @@ import {
 } from 'express-validator';
 
 import express from 'express';
-import { followAlbum } from '../users/user.services';
+import { isAuthenticated } from '../midlewares';
 
 export const postRouter = express.Router();
 
@@ -25,6 +25,7 @@ postRouter.get('/', async (req: Request, res: Response) => {
 postRouter.get(
   '/:id/likes',
   param('id').isNumeric(),
+  isAuthenticated,
   async (req: Request, res: Response) => {
     try {
       const likes = await PostServices.postLikeNumber(
@@ -40,6 +41,7 @@ postRouter.get(
 //GET: Find single Post by it's id
 postRouter.get(
   '/:id',
+  isAuthenticated,
   async (req: Request, res: Response) => {
     const postId: number = parseInt(req.params.id, 10);
 
@@ -60,6 +62,7 @@ postRouter.get(
 //Params title,photo,description,userId,albumId,locationId,
 postRouter.post(
   '/',
+  isAuthenticated,
   body('title').isString(),
   body('photo').isBase64(),
   body('description').isString().optional(),
@@ -88,6 +91,7 @@ postRouter.post(
 //Params title,photo,description,userId,albumId,locationId,
 postRouter.put(
   '/:id',
+  isAuthenticated,
   body('title').isString(),
   body('photo').isBase64(),
   body('description').isString().optional(),
@@ -117,6 +121,7 @@ postRouter.put(
 //POST: Delete Post
 postRouter.delete(
   '/:id',
+  isAuthenticated,
   async (req: Request, res: Response) => {
     try {
       await PostServices.deletePost(

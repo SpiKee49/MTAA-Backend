@@ -8,12 +8,14 @@ import {
 } from 'express-validator';
 
 import express from 'express';
+import { isAuthenticated } from '../midlewares';
 
 export const albumRouter = express.Router();
 
 //GET: all Albums
 albumRouter.get(
   '/',
+  isAuthenticated,
   query('search').isString().optional(),
   async (req: Request, res: Response) => {
     try {
@@ -30,6 +32,7 @@ albumRouter.get(
 //GET: Find single Album by it's id
 albumRouter.get(
   '/:id',
+  isAuthenticated,
   async (req: Request, res: Response) => {
     const albumId: number = parseInt(req.params.id, 10);
 
@@ -50,6 +53,7 @@ albumRouter.get(
 //Params title, description?, tags?,ownerId
 albumRouter.post(
   '/',
+  isAuthenticated,
   body('title').isString(),
   body('description').isString().optional(),
   body('tags').isArray().optional(),
@@ -76,6 +80,7 @@ albumRouter.post(
 //Params title, description, tags
 albumRouter.put(
   '/:id',
+  isAuthenticated,
   body('title').isString(),
   body('description').isString().optional(),
   body('tags').isArray().optional(),
@@ -102,6 +107,7 @@ albumRouter.put(
 
 albumRouter.delete(
   '/:id',
+  isAuthenticated,
   async (req: Request, res: Response) => {
     try {
       await AlbumServices.deleteAlbum(

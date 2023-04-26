@@ -1,5 +1,4 @@
 import * as AuthServices from './auth.services';
-import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
 import { NextFunction, Request, Response } from 'express';
@@ -86,7 +85,9 @@ authRouter.post(
     try {
       const { username, password } = req.body;
       if (!username || !password) {
-        res.status(400);
+        res
+          .status(400)
+          .json({ message: 'Put in some creds, pls.' });
         throw new Error('Put in some creds, pls.');
       }
 

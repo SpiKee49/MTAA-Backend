@@ -12,28 +12,36 @@ export function isAuthenticated(
   next: NextFunction
 ) {
   const { authorization } = req.headers;
-
   if (!authorization) {
     res.status(401);
     throw new Error('🚫 Un-Authorized 🚫');
   }
 
   try {
+    console.log('before split', authorization);
     const token = authorization.split(' ')[1];
+    console.log('after split before verify', token);
     const payload = jwt.verify(
       token,
       process.env.JWT_ACCESS_SECRET as jwt.Secret
     );
-
+    console.log('payload', payload);
     (req as CustomRequest).token = payload;
   } catch (err) {
-    res.status(401);
     if (err instanceof Error) {
       if (err.name === 'TokenExpiredError') {
+        res
+          .status(401)
+          .json({ message: 'TokenExpiredError' });
         throw new Error(err.name);
+      } else {
+        res
+          .status(401)
+          .json({ message: '🚫 Un-Authorized 🚫' });
+        throw new Error('🚫 Un-Authorized 🚫');
       }
-      throw new Error('🚫 Un-Authorized 🚫');
     } else {
+      console.error(err);
       throw new Error('🚫 Un-Authorized 🚫');
     }
   }

@@ -58,6 +58,12 @@ export const findUserByUsername = async (
     where: {
       username,
     },
+    include: {
+      followedAlbums: true,
+      pinnedAlbum: true,
+      friends: true,
+      likedPosts: true,
+    },
   });
 };
 

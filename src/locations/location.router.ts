@@ -9,12 +9,14 @@ import {
 } from 'express-validator';
 
 import express from 'express';
+import { isAuthenticated } from '../midlewares';
 
 export const locationRouter = express.Router();
 
 //GET: all Locations
 locationRouter.get(
   '/',
+  isAuthenticated,
   query('search').isString().optional(),
   async (req: Request, res: Response) => {
     try {
@@ -32,6 +34,7 @@ locationRouter.get(
 //GET: Find single Location by it's id
 locationRouter.get(
   '/:id',
+  isAuthenticated,
   async (req: Request, res: Response) => {
     const locationId: number = parseInt(req.params.id, 10);
 
@@ -54,6 +57,7 @@ locationRouter.get(
 //Params name,longitude, latitude
 locationRouter.post(
   '/',
+  isAuthenticated,
   body('name').isString(),
   body('longitude').isString(),
   body('latitude').isString(),
@@ -80,6 +84,7 @@ locationRouter.post(
 //Params  name,longitude, latitude
 locationRouter.put(
   '/:id',
+  isAuthenticated,
   body('name').isString(),
   body('longitude').isString(),
   body('latitude').isString(),
@@ -105,6 +110,7 @@ locationRouter.put(
 //POST: Delete Location
 locationRouter.delete(
   '/:id',
+  isAuthenticated,
   async (req: Request, res: Response) => {
     try {
       await LocationServices.deleteLocation(

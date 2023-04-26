@@ -9,10 +9,6 @@ type Album = {
   tags?: string[];
 };
 
-interface AlbumDetail extends Album {
-  followingUsers: User[];
-}
-
 export const listAllAlbums = async (
   search?: string
 ): Promise<Album[]> => {

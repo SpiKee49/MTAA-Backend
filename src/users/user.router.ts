@@ -17,6 +17,7 @@ export const userRouter = express.Router();
 userRouter.get(
   '/',
   query('search').isString(),
+  isAuthenticated,
   async (req: Request, res: Response) => {
     try {
       const users = await UserService.listAllUsers(
@@ -31,14 +32,16 @@ userRouter.get(
 
 //GET: A single User
 userRouter.get(
-  '/:id',
-  param('id').isUUID(),
+  '/:username',
+  param('username').isString(),
   isAuthenticated,
   async (req: Request, res: Response) => {
-    const userId: string = req.params.id;
+    const username: string = req.params.username;
 
     try {
-      const user = await UserService.findUser(userId);
+      const user = await UserService.findUserByUsername(
+        username
+      );
       if (user) {
         return res.status(200).json(user);
       }
@@ -55,6 +58,7 @@ userRouter.put(
   '/:id',
   param('id').isUUID(),
   body('albumId').isNumeric(),
+  isAuthenticated,
   async (req: Request, res: Response) => {
     const userId: string = req.params.id;
 
@@ -74,7 +78,7 @@ userRouter.put(
   }
 );
 
-//POST: Like post
+//put: Like post
 userRouter.put(
   '/:id/like',
   param('id').isUUID(),
@@ -92,46 +96,22 @@ userRouter.put(
         return res.status(200).json(user);
       }
 
-      return res.status(404).json('User not found');
+      return res.status(403).json('User not found');
     } catch (err) {
       return res.status(500).json(err);
     }
   }
 );
 
-//POST: Add User
-//Params username,email,password,profileName
-userRouter.post(
-  '/',
-  body('username').isString(),
-  body('email').isEmail(),
-  body('password').isString(),
-  body('profileName').isString(),
-  async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res
-        .status(400)
-        .json({ errors: errors.array() });
-    }
-
-    try {
-      const user = req.body;
-      const newAuthor = await UserService.addUser(user);
-      return res.status(201).json(newAuthor);
-    } catch (err) {
-      return res.status(500).json(err);
-    }
-  }
-);
 //POST: Update User
 //Params username,email,password,profileName
 userRouter.put(
   '/:id',
-  body('username').isString(),
-  body('email').isEmail(),
-  body('password').isString(),
-  body('profileName').isString(),
+  body('username').isString().optional(),
+  body('email').isEmail().optional(),
+  body('password').isString().optional(),
+  body('profileName').isString().optional(),
+  isAuthenticated,
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -156,6 +136,7 @@ userRouter.put(
 
 userRouter.delete(
   '/:id',
+  isAuthenticated,
   async (req: Request, res: Response) => {
     try {
       await UserService.deleteUser(req.params.id);
