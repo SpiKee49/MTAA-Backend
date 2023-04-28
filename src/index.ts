@@ -1,9 +1,11 @@
 import * as dotenv from 'dotenv';
 
+import swaggerUi from 'swagger-ui-express';
 import { albumRouter } from './albums/album.router';
 import { authRouter } from './auth/auth.router';
 import cors from 'cors';
 import express from 'express';
+import swaggerSpec from './swagger-config';
 import { locationRouter } from './locations/location.router';
 import { postRouter } from './posts/post.router';
 import { requestRouter } from './requests/request.router';
@@ -29,6 +31,9 @@ app.use('/api/albums', albumRouter);
 app.use('/api/posts', postRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/requests', requestRouter);
+
+//swagger middleware for documentation
+app.use('/api/documentation', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(PORT, () =>
   console.log(`App listening on port ${PORT}!`)
