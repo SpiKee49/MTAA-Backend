@@ -1,4 +1,5 @@
 import { db } from '../utils/db.server';
+import e from 'express';
 
 export type User = {
   id: string;
@@ -6,6 +7,11 @@ export type User = {
   profileName: string;
   email: string;
   password: string;
+};
+
+export type UserFriends = {
+  friends: Array<{ id: string; profileName: string }>;
+  friendedBy: Array<{ id: string; profileName: string }>;
 };
 
 export const listAllUsers = async (
@@ -193,6 +199,67 @@ export const likePost = async (
     },
     include: {
       likedPosts: true,
+    },
+  });
+};
+
+export const getAllFriends = async (
+  id: string
+): Promise<UserFriends | null> => {
+  return db.user.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      friends: {
+        select: {
+          id: true,
+          profileName: true,
+        },
+      },
+      friendedBy: {
+        select: {
+          id: true,
+          profileName: true,
+        },
+      },
+    },
+  });
+};
+
+export const removeFriend = async (
+  id: string,
+  friendId: string
+): Promise<UserFriends> => {
+  return db.user.update({
+    where: {
+      id,
+    },
+    data: {
+      friendedBy: {
+        disconnect: {
+          id: friendId,
+        },
+      },
+      friends: {
+        disconnect: {
+          id: friendId,
+        },
+      },
+    },
+    include: {
+      friends: {
+        select: {
+          id: true,
+          profileName: true,
+        },
+      },
+      friendedBy: {
+        select: {
+          id: true,
+          profileName: true,
+        },
+      },
     },
   });
 };

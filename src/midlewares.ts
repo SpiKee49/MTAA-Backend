@@ -38,7 +38,6 @@ export function isAuthenticated(
         throw new Error(' Un-Authorized ');
       }
     } else {
-      console.error(err);
       throw new Error(' Un-Authorized ');
     }
   }

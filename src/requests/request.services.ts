@@ -5,6 +5,7 @@ type FriendReq = {
   id: number;
   fromId: string;
   toId: string;
+  revoked: boolean | null;
 };
 
 export const sendRequest = async (
@@ -15,6 +16,30 @@ export const sendRequest = async (
     data: {
       fromId,
       toId,
+    },
+  });
+};
+
+export const getSendFromRequest = async (
+  fromId: string
+): Promise<FriendReq[]> => {
+  return db.friendRequest.findMany({
+    where: {
+      fromId,
+    },
+  });
+};
+
+export const getSendToRequest = async (
+  toId: string
+): Promise<FriendReq[]> => {
+  return db.friendRequest.findMany({
+    where: {
+      toId,
+      revoked: null,
+    },
+    include: {
+      fromUser: true,
     },
   });
 };
@@ -32,7 +57,7 @@ export const handleRequest = async (
     },
   });
 
-  if (status) {
+  if (status === true) {
     return db.user.update({
       where: {
         id: request.toId,

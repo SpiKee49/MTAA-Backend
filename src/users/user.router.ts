@@ -30,6 +30,25 @@ userRouter.get(
   }
 );
 
+//GET: all Friends
+userRouter.get(
+  '/:id/friends',
+  param('id').isString(),
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    try {
+      const user = await UserService.getAllFriends(
+        req.params.id
+      );
+      const friends = user?.friends.concat(user.friendedBy);
+
+      return res.status(200).json(friends);
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+  }
+);
+
 //GET: A single User
 userRouter.get(
   '/:username',
@@ -97,6 +116,30 @@ userRouter.put(
       }
 
       return res.status(403).json('User not found');
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+  }
+);
+
+//put: Remove Friend
+userRouter.put(
+  '/friends/remove',
+  body('id').isUUID(),
+  body('friendId').isUUID(),
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    const { id, friendId } = req.body;
+
+    try {
+      const friends = await UserService.removeFriend(
+        id,
+        friendId
+      );
+      const result = friends.friends.concat(
+        friends.friendedBy
+      );
+      return res.status(200).json(result);
     } catch (err) {
       return res.status(500).json(err);
     }
