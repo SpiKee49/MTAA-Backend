@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 
+import swaggerUi from 'swagger-ui-express';
 import { Expo, ExpoPushToken } from 'expo-server-sdk';
 
 import { WebSocketServer } from 'ws';
@@ -7,6 +8,7 @@ import { albumRouter } from './albums/album.router';
 import { authRouter } from './auth/auth.router';
 import cors from 'cors';
 import express from 'express';
+import swaggerSpec from './swagger-config';
 import { locationRouter } from './locations/location.router';
 import { postRouter } from './posts/post.router';
 import { requestRouter } from './requests/request.router';
@@ -78,6 +80,39 @@ app.use('/api/posts', postRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/requests', requestRouter);
 app.use('/api/tokens', tokenRouter);
+
+// app.listen(PORT, () =>
+//   console.log(`App listening on port ${PORT}!`)
+// );
+let server = require('http').createServer();
+const wss = new WebSocketServer({
+  server: server,
+  perMessageDeflate: false,
+});
+
+wss.on('connection', function connection(ws) {
+  console.log('[i]Connection to WS server established...');
+  ws.on('error', console.error);
+  ws.on('message', function message(data) {
+    wss.clients.forEach(function each(client) {
+      if (
+        client !== ws &&
+        client.readyState === WebSocket.OPEN
+      ) {
+        client.send('update');
+      }
+    });
+  });
+});
+
+server.on('request', app);
+
+//swagger middleware for documentation
+app.use(
+  '/api/documentation',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec)
+);
 
 // app.listen(PORT, () =>
 //   console.log(`App listening on port ${PORT}!`)
