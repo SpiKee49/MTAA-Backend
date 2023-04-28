@@ -1,7 +1,6 @@
-import { User } from '../users/user.services';
 import { db } from '../utils/db.server';
 
-type Album = {
+export type Album = {
   id: number;
   title: string;
   description: string | null;

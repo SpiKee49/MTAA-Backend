@@ -86,3 +86,7 @@ model FriendRequest {
   createdAt DateTime @default(now())
   revoked   Boolean?
 }
+
+model PushToken {
+  token String @unique
+}

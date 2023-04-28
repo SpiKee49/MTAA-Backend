@@ -8,7 +8,9 @@ import {
 } from 'express-validator';
 
 import express from 'express';
+import { getAllTokens } from '../tokens/token.services';
 import { isAuthenticated } from '../midlewares';
+import { sendPushNotifications } from '..';
 
 export const postRouter = express.Router();
 
@@ -80,6 +82,14 @@ postRouter.post(
     try {
       const post = req.body;
       const newPost = await PostServices.addPost(post);
+      const tokens = await getAllTokens();
+      if (newPost !== undefined && tokens.length > 0) {
+        sendPushNotifications(
+          newPost.album.title,
+          tokens.map(item => item.token)
+        );
+      }
+
       return res.status(201).json(newPost);
     } catch (err) {
       return res.status(500).json(err);

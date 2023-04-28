@@ -1,3 +1,4 @@
+import { Album } from '../albums/album.services';
 import { db } from '../utils/db.server';
 
 type Post = {
@@ -8,6 +9,10 @@ type Post = {
   userId: string;
   albumId: number;
   locationId: number;
+};
+
+type PostWithAlbum = Post & {
+  album: Album;
 };
 
 export const listAllPosts = async (): Promise<Post[]> => {
@@ -32,9 +37,16 @@ export const findPost = async (
 
 export const addPost = async (
   post: Post
-): Promise<Post> => {
+): Promise<PostWithAlbum> => {
   return db.post.create({
-    data: { ...post },
+    data: {
+      ...post,
+      photo: Buffer.from(
+        '/9j/4AAQSkZJRgABAQEASABIAAD/',
+        'utf-8'
+      ),
+    },
+    include: { album: true },
   });
 };
 
