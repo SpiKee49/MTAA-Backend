@@ -8,12 +8,12 @@ import { albumRouter } from './albums/album.router';
 import { authRouter } from './auth/auth.router';
 import cors from 'cors';
 import express from 'express';
-import swaggerSpec from './swagger-config';
 import { locationRouter } from './locations/location.router';
 import { postRouter } from './posts/post.router';
 import { requestRouter } from './requests/request.router';
 import { tokenRouter } from './tokens/token.router';
 import { userRouter } from './users/user.router';
+const swaggerFile = require('./swagger_output.json');
 
 dotenv.config();
 
@@ -111,7 +111,7 @@ server.on('request', app);
 app.use(
   '/api/documentation',
   swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec)
+  swaggerUi.setup(swaggerFile)
 );
 
 // app.listen(PORT, () =>

@@ -14,6 +14,7 @@ import { isAuthenticated } from '../midlewares';
 export const userRouter = express.Router();
 
 //GET: all Users
+//#swagger.tags = ['Users']
 userRouter.get(
   '/',
   query('search').isString(),
@@ -50,6 +51,7 @@ userRouter.get(
 );
 
 //GET: A single User
+//#swagger.tags = ['Users']
 userRouter.get(
   '/:username',
   param('username').isString(),
@@ -73,6 +75,7 @@ userRouter.get(
 );
 
 //POST: Follwing new album
+//#swagger.tags = ['Users']
 userRouter.put(
   '/:id',
   param('id').isUUID(),
@@ -98,6 +101,7 @@ userRouter.put(
 );
 
 //put: Like post
+//#swagger.tags = ['Users']
 userRouter.put(
   '/:id/like',
   param('id').isUUID(),
@@ -148,6 +152,7 @@ userRouter.put(
 
 //POST: Update User
 //Params username,email,password,profileName
+//#swagger.tags = ['Users']
 userRouter.put(
   '/:id',
   body('username').isString().optional(),
@@ -176,7 +181,7 @@ userRouter.put(
   }
 );
 //POST: Delete User
-
+//#swagger.tags = ['Users']
 userRouter.delete(
   '/:id',
   isAuthenticated,
