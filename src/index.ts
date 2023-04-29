@@ -5,11 +5,11 @@ import { albumRouter } from './albums/album.router';
 import { authRouter } from './auth/auth.router';
 import cors from 'cors';
 import express from 'express';
-import swaggerSpec from './swagger-config';
 import { locationRouter } from './locations/location.router';
 import { postRouter } from './posts/post.router';
 import { requestRouter } from './requests/request.router';
 import { userRouter } from './users/user.router';
+const swaggerFile = require('./swagger_output.json');
 
 dotenv.config();
 
@@ -33,7 +33,14 @@ app.use('/api/auth', authRouter);
 app.use('/api/requests', requestRouter);
 
 //swagger middleware for documentation
-app.use('/api/documentation', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+require('./users/user.router')(app)
+require('./locations/location.router')(app)
+require('./albums/album.router')(app)
+require('./posts/post.router')(app)
+require('./auth/auth.router')(app)
+require('./requests/request.router')(app)
+
 
 app.listen(PORT, () =>
   console.log(`App listening on port ${PORT}!`)
