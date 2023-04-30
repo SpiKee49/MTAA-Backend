@@ -58,6 +58,17 @@ const doc = {
             longitude: '49.19658843800614',
             latitude: '20.213747396503443',
         },
+        AddLocation:{
+            $name: 'Tesco Lamač Bratislava',
+            $longitude: '48.17677398662877', 
+            $latitude: '17.06544830967026',
+        },
+        UpdateLocation:{
+            $name: 'Tesco Lamač Bratislava',
+            $longitude: '48.17677398662877', 
+            $latitude: '17.06544830967026',
+        },
+
         Album:{
             id: 111,
             title: "Stretnutie na plazi",
