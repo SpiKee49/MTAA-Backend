@@ -25,13 +25,13 @@ requestRouter.get(
     /*#swagger.parameters['id']={
       in: 'path',
       description: 'The type of request (from or to)',
-      required: true,
+      required: 'true',
       type: 'string'
     } */
     /*#swagger.parameters['type']={
       in: 'path',
       description: 'User ID',
-      required: true,
+      required: 'true',
       type: 'string',
       format: 'uuid'
     } */
@@ -71,13 +71,13 @@ requestRouter.post(
     /*#swagger.parameters['fromId'] = {
       in: 'body',
       description: 'The ID of the user sending the FriendRequest.',
-      required: true,
+      required: 'true',
       type: 'string'
     }*/
     /*#swagger.parameters['toId'] = {
       in: 'body',
       description: 'The ID of the user receiving the FriendRequest.',
-      required: true,
+      required: 'true',
       type: 'string'
     }*/
     try {
@@ -86,7 +86,7 @@ requestRouter.post(
           req.body.fromId,
           req.body.toId
         );
-        /*  #swagger.responses[201] = { 
+        /*  #swagger.responses[200] = { 
         schema: { $ref: "#/definitions/FriendRequest" },   
         description: 'FriendRequest was sent'
         } */
@@ -113,13 +113,13 @@ requestRouter.post(
     /*#swagger.parameters['id'] = { 
       in: 'body', 
       description: 'The ID of the friend request to handle.', 
-      required: true, 
+      required: 'true', 
       type: 'integer' 
       }*/
     /*#swagger.parameters['status'] = { 
       in: 'body', 
       description: 'The status to set for the friend request(status will appear in the revoked parameter of FriendRequest)', 
-      required: true, 
+      required: 'true', 
       type: 'boolean' 
       }*/
     try {

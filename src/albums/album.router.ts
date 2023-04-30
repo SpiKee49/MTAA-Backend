@@ -59,7 +59,7 @@ albumRouter.get(
     /*#swagger.parameters['id'] = {
         in: 'path',
         description: 'Numeric ID of the album to retrieve'
-        required: true,
+        required: 'true',
         type: 'integer'
     }*/
     const albumId: number = parseInt(req.params.id, 10);
@@ -150,19 +150,19 @@ albumRouter.put(
     /* #swagger.parameters['id'] = {
         in: 'path',
         description: 'ID of the album to be updated',
-        required: true,
+        required: 'true',
         type: 'integer'
     } */
     /* #swagger.parameters['album'] = {
         in: 'body',
         description: 'Data to update album',
-        required: true,
+        required: 'true',
         schema: { $ref: "#/definitions/UpdateAlbum" }
     } */
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      /*#swagger.responses[404] = { 
+      /*#swagger.responses[400] = { 
       description: 'Album not found' 
       }*/
       return res
@@ -200,7 +200,7 @@ albumRouter.delete(
     /*#swagger.parameters['id'] = { 
       in: 'path', 
       description: 'ID of album to delete', 
-      required: true, 
+      required: 'true', 
       type: 'integer' 
     } */
     

@@ -58,7 +58,7 @@ locationRouter.get(
     /*#swagger.parameters['id'] = {
       in: 'path',
       description: 'Numeric ID of the location to retrieve',
-      required: true,
+      required: 'true',
       type: 'integer'
     }*/
     const locationId: number = parseInt(req.params.id, 10);
@@ -150,19 +150,19 @@ locationRouter.put(
     /* #swagger.parameters['id'] = {
       in: 'path',
       description: 'ID of the location to be updated',
-      required: true,
+      required: 'true',
       type: 'integer'
     } */
     /* #swagger.parameters['location'] = {
       in: 'body',
       description: 'Data to update location',
-      required: true,
+      required: 'true',
       schema: { $ref: "#/definitions/UpdateLocation" }
     } */
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      /*#swagger.responses[404] = { 
+      /*#swagger.responses[400] = { 
       description: 'Location not found' 
       }*/
       return res
@@ -200,7 +200,7 @@ locationRouter.delete(
     /*#swagger.parameters['id'] = { 
       in: 'path', 
       description: 'ID of location to delete', 
-      required: true, 
+      required: 'true', 
       type: 'integer' 
     } */
     

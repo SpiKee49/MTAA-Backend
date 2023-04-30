@@ -44,8 +44,8 @@ tokenRouter.post(
     /*#swagger.parameters['token'] ={
       in: 'body',
       description:'Token that is being added',
-      required: true,
-      schema: { $ref: "#/definitions/AddToken" }
+      required: 'true',
+      schema: { $ref: "#/definitions/Token" }
     }*/
     try {
       const existingToken = await TokenServices.getToken(
@@ -55,13 +55,13 @@ tokenRouter.post(
         const newToken = await TokenServices.addToken(
           req.body.token
         );
-        /*  #swagger.responses[201] = { 
+        /*  #swagger.responses[200] = { 
         schema: { $ref: "#/definitions/Token" },   
         description: 'Token created and added'
         } */
         return res.status(200).json(newToken);
       }
-      /*  #swagger.responses[201] = { 
+      /*  #swagger.responses[200] = { 
       schema: { $ref: "#/definitions/Token" },   
       description: 'Token added'
       } */
@@ -89,8 +89,8 @@ tokenRouter.delete(
     /*#swagger.parameters['token'] = { 
       in: 'body', 
       description: 'Token to delete', 
-      required: true, 
-      schema:{ $ref: "#/definitions/DeleteToken" } 
+      required: 'true', 
+      schema:{ $ref: "#/definitions/Token" } 
     } */
     try {
       const request = await TokenServices.removeToken(
