@@ -35,7 +35,7 @@ albumRouter.get(
       );
       /*#swagger.responses[200] = { 
       description: 'OK',
-      schema: { $ref: "#/definitions/Album" }   
+      schema:{ $ref: '#/definitions/AlbumList' },  
       }*/
       return res.status(200).json(albums);
     } catch (err) {
@@ -70,7 +70,7 @@ albumRouter.get(
       if (album) {
         /*#swagger.responses[200] = { 
           description: 'The album with the given id'
-          schema: { $ref: "#/definitions/Album" },   
+          schema: { $ref: '#/definitions/Album' },   
           }*/
         return res.status(200).json(album);
       }
@@ -88,6 +88,7 @@ albumRouter.get(
 );
 
 //POST: Add Album
+//Params title, description?, tags?, ownerId
 albumRouter.post(
   '/',
   isAuthenticated,
@@ -96,7 +97,6 @@ albumRouter.post(
   body('tags').isArray().optional(),
   body('ownerId').isString(),
   async (req: Request, res: Response) => {
-    //Params title, description?, tags?, ownerId
     //#swagger.tags = ['Albums']
     //#swagger.summary = 'Add a new album'
     //#swagger.description = 'Add a new album to the database'
@@ -121,7 +121,7 @@ albumRouter.post(
       const newAlbum = await AlbumServices.addAlbum(album);
       /*#swagger.responses[201] = { 
         description: 'Album created'
-        schema: { $ref: "#/definitions/Album" },   
+        schema: { $ref: '#/definitions/Album' },   
       }*/
       return res.status(201).json(newAlbum);
     } catch (err) {
@@ -156,7 +156,7 @@ albumRouter.put(
         in: 'body',
         description: 'Data to update album',
         required: 'true',
-        schema: { $ref: "#/definitions/UpdateAlbum" }
+        schema: { $ref: '#/definitions/UpdateAlbum' }
     } */
     
     const errors = validationResult(req);
@@ -176,7 +176,7 @@ albumRouter.put(
       );
       /*#swagger.responses[201] = { 
       description: 'Album updated', 
-      schema: { $ref: "#/definitions/Album" }
+      schema: { $ref: '#/definitions/Album' }
       }*/
       return res.status(201).json(updatedAlbum);
     } catch (err) {
