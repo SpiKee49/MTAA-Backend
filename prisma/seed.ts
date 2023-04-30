@@ -198,18 +198,18 @@ function getLocations(): Location[] {
   return [
     {
       name: 'Hotel Hilton',
-      longitude: '48.13941048398324', // Pentagon Bratislava
-      latitude: '17.204298784532334',
+      latitude: '48.13941048398324', // Pentagon Bratislava
+      longitude: '17.204298784532334',
     },
     {
       name: 'Lujs Vynton Bratislava',
-      longitude: '48.17677398662877', // Tesco Lamač
-      latitude: '17.06544830967026',
+      latitude: '48.17677398662877', // Tesco Lamač
+      longitude: '17.06544830967026',
     },
     {
       name: 'Mount Everest z Lidla',
-      longitude: '49.19658843800614', // Lomnicky štít
-      latitude: '20.213747396503443',
+      latitude: '49.19658843800614', // Lomnicky štít
+      longitude: '20.213747396503443',
     },
   ];
 }

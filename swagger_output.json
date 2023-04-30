@@ -182,31 +182,16 @@
               "type": "object",
               "properties": {
                 "email": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "example": "string"
-                    }
-                  }
+                  "type": "string",
+                  "example": "email"
                 },
                 "password": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "example": "string"
-                    }
-                  }
+                  "type": "string",
+                  "example": "new password"
                 },
                 "profileName": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "example": "string"
-                    }
-                  }
+                  "type": "string",
+                  "example": "new profile name"
                 }
               }
             }
@@ -773,11 +758,26 @@
     },
     "/api/posts/": {
       "get": {
-        "description": "",
-        "parameters": [],
+        "tags": [
+          "Posts"
+        ],
+        "summary": "List all Posts",
+        "description": "Returns a list of all posts, optionally filtered by search term",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "A search term to filter the list of posts"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PostList"
+            }
           },
           "500": {
             "description": "Internal Server Error"
@@ -785,7 +785,11 @@
         }
       },
       "post": {
-        "description": "",
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Add post",
+        "description": "Returning post object",
         "parameters": [
           {
             "name": "authorization",
@@ -793,27 +797,23 @@
             "type": "string"
           },
           {
-            "name": "body",
+            "name": "data",
             "in": "body",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "photo": {
-                  "example": "any"
-                },
-                "post": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/AddPost"
             }
           }
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PostDetail"
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Validation error"
           },
           "401": {
             "description": "Unauthorized"
@@ -826,13 +826,17 @@
     },
     "/api/posts/{id}/likes": {
       "get": {
-        "description": "",
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Get number of likes on post",
+        "description": "returns number of likes on post based on id",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
           },
           {
             "name": "authorization",
@@ -842,7 +846,8 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "type": "number"
           },
           "401": {
             "description": "Unauthorized"
@@ -855,13 +860,17 @@
     },
     "/api/posts/{id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Post Detail",
+        "description": "Returns extended post object",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
           },
           {
             "name": "authorization",
@@ -871,13 +880,19 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PostDetail"
+            }
           },
           "401": {
             "description": "Unauthorized"
           },
-          "404": {
-            "description": "Not Found"
+          "403": {
+            "description": "Post not found",
+            "schema": {
+              "$ref": "#/definitions/UserDetail"
+            }
           },
           "500": {
             "description": "Internal Server Error"
@@ -885,7 +900,11 @@
         }
       },
       "put": {
-        "description": "",
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Update Post",
+        "description": "Returns extended post object",
         "parameters": [
           {
             "name": "id",
@@ -901,10 +920,13 @@
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PostDetail"
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Validation error"
           },
           "401": {
             "description": "Unauthorized"
@@ -915,6 +937,10 @@
         }
       },
       "delete": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Delete post",
         "description": "",
         "parameters": [
           {
@@ -931,7 +957,7 @@
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "OK"
           },
           "401": {
             "description": "Unauthorized"
@@ -1353,6 +1379,12 @@
         }
       }
     },
+    "LocationList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Location"
+      }
+    },
     "AddLocation": {
       "type": "object",
       "properties": {
@@ -1639,6 +1671,167 @@
         }
       }
     },
+    "PostDetail": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 15
+        },
+        "title": {
+          "type": "string",
+          "example": "Potapanie sa"
+        },
+        "photo": {
+          "type": "object",
+          "properties": {
+            "0": {
+              "type": "number",
+              "example": 47
+            },
+            "1": {
+              "type": "number",
+              "example": 57
+            },
+            "2": {
+              "type": "number",
+              "example": 106
+            },
+            "3": {
+              "type": "number",
+              "example": 47
+            },
+            "4": {
+              "type": "number",
+              "example": 52
+            },
+            "5": {
+              "type": "number",
+              "example": 65
+            },
+            "6": {
+              "type": "number",
+              "example": 65
+            },
+            "7": {
+              "type": "number",
+              "example": 81
+            },
+            "8": {
+              "type": "number",
+              "example": 83
+            },
+            "9": {
+              "type": "number",
+              "example": 107
+            },
+            "10": {
+              "type": "number",
+              "example": 90
+            },
+            "11": {
+              "type": "number",
+              "example": 74
+            },
+            "12": {
+              "type": "number",
+              "example": 82
+            },
+            "13": {
+              "type": "number",
+              "example": 103
+            },
+            "14": {
+              "type": "number",
+              "example": 65
+            },
+            "15": {
+              "type": "number",
+              "example": 66
+            },
+            "16": {
+              "type": "number",
+              "example": 65
+            },
+            "17": {
+              "type": "number",
+              "example": 81
+            },
+            "18": {
+              "type": "number",
+              "example": 69
+            },
+            "19": {
+              "type": "number",
+              "example": 65
+            },
+            "20": {
+              "type": "number",
+              "example": 83
+            },
+            "21": {
+              "type": "number",
+              "example": 65
+            },
+            "22": {
+              "type": "number",
+              "example": 66
+            },
+            "23": {
+              "type": "number",
+              "example": 73
+            },
+            "24": {
+              "type": "number",
+              "example": 65
+            },
+            "25": {
+              "type": "number",
+              "example": 65
+            },
+            "26": {
+              "type": "number",
+              "example": 68
+            },
+            "27": {
+              "type": "number",
+              "example": 47
+            }
+          }
+        },
+        "description": {
+          "type": "string",
+          "example": "Nie vsetky dobre veci su napovrchu"
+        },
+        "userId": {
+          "type": "string",
+          "example": "152521515"
+        },
+        "albumId": {
+          "type": "number",
+          "example": 111
+        },
+        "locationId": {
+          "type": "number",
+          "example": 145
+        },
+        "location": {
+          "$ref": "#/definitions/Location"
+        },
+        "album": {
+          "$ref": "#/definitions/Album"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "likedBy": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        }
+      }
+    },
     "PostList": {
       "type": "array",
       "items": {
@@ -1648,10 +1841,6 @@
     "AddPost": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "number",
-          "example": 15
-        },
         "title": {
           "type": "string",
           "example": "Potapanie sa"
@@ -1676,7 +1865,14 @@
           "type": "number",
           "example": 145
         }
-      }
+      },
+      "required": [
+        "title",
+        "photo",
+        "userId",
+        "albumId",
+        "locationId"
+      ]
     },
     "Request": {
       "type": "object",

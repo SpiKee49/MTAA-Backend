@@ -101,8 +101,6 @@ albumRouter.get(
 );
 
 //POST: Add Album
-
-//TODO: swagger.security
 albumRouter.post(
   '/',
   isAuthenticated,

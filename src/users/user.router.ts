@@ -82,7 +82,6 @@ userRouter.get(
 );
 
 //GET: A single User
-
 userRouter.get(
   '/:username',
   param('username').isString(),

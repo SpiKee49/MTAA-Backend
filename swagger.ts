@@ -65,6 +65,7 @@ const doc = {
       longitude: '49.19658843800614',
       latitude: '20.213747396503443',
     },
+    LocationList: [{ $ref: '#/definitions/Location' }],
     AddLocation: {
       $name: 'Tesco Lamač Bratislava',
       $longitude: '48.17677398662877',
@@ -110,15 +111,30 @@ const doc = {
       albumId: 111,
       locationId: 145,
     },
-    PostList: [{ $ref: '#/definitions/Post' }],
-    AddPost: {
+    PostDetail: {
       id: 15,
       title: 'Potapanie sa',
-      photo: 'Base64String',
+      photo: Buffer.from(
+        '/9j/4AAQSkZJRgABAQEASABIAAD/',
+        'utf-8'
+      ),
       description: 'Nie vsetky dobre veci su napovrchu',
       userId: '152521515',
       albumId: 111,
       locationId: 145,
+      location: { $ref: '#/definitions/Location' },
+      album: { $ref: '#/definitions/Album' },
+      user: { $ref: '#/definitions/User' },
+      likedBy: [{ $ref: '#/definitions/User' }],
+    },
+    PostList: [{ $ref: '#/definitions/Post' }],
+    AddPost: {
+      $title: 'Potapanie sa',
+      $photo: 'Base64String',
+      description: 'Nie vsetky dobre veci su napovrchu',
+      $userId: '152521515',
+      $albumId: 111,
+      $locationId: 145,
     },
     Request: {
       id: 12,
