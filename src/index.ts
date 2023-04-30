@@ -10,8 +10,11 @@ import express from 'express';
 import { locationRouter } from './locations/location.router';
 import { postRouter } from './posts/post.router';
 import { requestRouter } from './requests/request.router';
+import swaggerUi from 'swagger-ui-express';
 import { tokenRouter } from './tokens/token.router';
 import { userRouter } from './users/user.router';
+
+const swaggerFile = require('../swagger_output.json');
 
 dotenv.config();
 
@@ -79,6 +82,12 @@ app.use('/api/auth', authRouter);
 app.use('/api/requests', requestRouter);
 app.use('/api/tokens', tokenRouter);
 
+//swagger middleware for documentation
+app.use(
+  '/documentation',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerFile)
+);
 // app.listen(PORT, () =>
 //   console.log(`App listening on port ${PORT}!`)
 // );
