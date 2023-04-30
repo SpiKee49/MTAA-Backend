@@ -10,7 +10,7 @@
     "start": "node src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.ts",
-    "swagger-autogen": "node swagger.ts"
+    "swagger-autogen": "ts-node swagger.ts"
   },
   "keywords": [],
   "author": "",

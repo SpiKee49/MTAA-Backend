@@ -14,18 +14,34 @@ import { isAuthenticated } from '../midlewares';
 export const userRouter = express.Router();
 
 //GET: all Users
-//#swagger.tags = ['Users']
 userRouter.get(
   '/',
-  query('search').isString(),
+  query('search').isString().optional(),
   isAuthenticated,
   async (req: Request, res: Response) => {
+    //#swagger.tags = ['Users']
+    //#swagger.summary= 'List all Users'
+    //#swagger.description= 'Returns a list of all users, optionally filtered by search term'
+    /*#swagger.parameters['search']={
+      in: 'query',
+      required: 'false',
+      type: 'string',
+      description: 'A search term to filter the list of users'
+    }*/
+
     try {
       const users = await UserService.listAllUsers(
         req.params.search
       );
+      /*#swagger.responses[200] = { 
+        description: 'OK',
+        schema: { $ref: "#/definitions/UserList" }   
+    }*/
       return res.status(200).json(users);
     } catch (err) {
+      /*#swagger.responses[500] = { 
+    description: 'Internal Server Error'  
+    }*/
       return res.status(500).json(err);
     }
   }
@@ -37,26 +53,50 @@ userRouter.get(
   param('id').isString(),
   isAuthenticated,
   async (req: Request, res: Response) => {
+    //#swagger.tags = ['Users']
+    //#swagger.summary= 'Get Users friends'
+    //#swagger.description= 'Returns array of Users, that are friends with current user'
+    /*#swagger.parameters['id']={
+      in: 'path',
+      required:'true',
+      type: 'string',
+      description: 'ID of User whose friends requesting'
+    }*/
     try {
       const user = await UserService.getAllFriends(
         req.params.id
       );
       const friends = user?.friends.concat(user.friendedBy);
-
+      /*#swagger.responses[200] = { 
+        description: 'OK',
+        schema: { $ref: "#/definitions/UserList" }   
+      }*/
       return res.status(200).json(friends);
     } catch (err) {
+      /*#swagger.responses[500] = { 
+        description: 'Internal Server Error'  
+      }*/
       return res.status(500).json(err);
     }
   }
 );
 
 //GET: A single User
-//#swagger.tags = ['Users']
+
 userRouter.get(
   '/:username',
   param('username').isString(),
   isAuthenticated,
   async (req: Request, res: Response) => {
+    //#swagger.tags = ['Users']
+    //#swagger.summary= 'User Detail'
+    //#swagger.description= 'Returns extended user object'
+    /*#swagger.parameters['username'] = {
+      in: 'path',
+      required:'true',
+      type: 'string',
+      description: 'username of user account'
+    }*/
     const username: string = req.params.username;
 
     try {
@@ -64,24 +104,48 @@ userRouter.get(
         username
       );
       if (user) {
+        /*#swagger.responses[200] = { 
+        description: 'OK',
+        schema: { $ref: "#/definitions/UserDetail" }   
+      }*/
         return res.status(200).json(user);
       }
-
-      return res.status(404).json('User not found');
+      /*#swagger.responses[403] = { 
+        description: 'User not found',
+        }*/
+      return res.status(403).json('User not found');
     } catch (err) {
+      /*#swagger.responses[500] = { 
+        description: 'Internal Server Error'  
+      }*/
       return res.status(500).json(err);
     }
   }
 );
 
 //POST: Follwing new album
-//#swagger.tags = ['Users']
 userRouter.put(
   '/:id',
   param('id').isUUID(),
   body('albumId').isNumeric(),
   isAuthenticated,
   async (req: Request, res: Response) => {
+    //#swagger.tags = ['Users']
+    //#swagger.summary = 'Follow album'
+    //#swagger.description = 'Returns extended user object'
+    /*#swagger.parameters['id'] = {
+      in: 'path',
+      required:'true',
+      type: 'string',
+      description: 'ID of user'
+    }*/
+    /*#swagger.parameters['data']={
+      in: 'body',
+      required:'true',
+      schema:{
+        $albumId: 111 
+      }
+    }*/
     const userId: string = req.params.id;
 
     try {
@@ -90,11 +154,20 @@ userRouter.put(
         Number(req.body.albumId)
       );
       if (user) {
+        /*#swagger.responses[200] = { 
+        description: 'OK',
+        schema: { $ref: "#/definitions/UserDetail" }   
+      }*/
         return res.status(200).json(user);
       }
-
-      return res.status(404).json('User not found');
+      /*#swagger.responses[403] = { 
+        description: 'User not found',
+        }*/
+      return res.status(403).json('User not found');
     } catch (err) {
+      /*#swagger.responses[500] = { 
+        description: 'Internal Server Error'  
+      }*/
       return res.status(500).json(err);
     }
   }
@@ -108,6 +181,23 @@ userRouter.put(
   body('postId').isNumeric(),
   isAuthenticated,
   async (req: Request, res: Response) => {
+    //#swagger.tags = ['Users']
+    //#swagger.summary= 'Like post'
+    //#swagger.description= 'Returns extended user object'
+    /*#swagger.parameters['id']={
+      in: 'path',
+      required:'true',
+      type: 'string',
+      description: 'ID of user'
+    }*/
+
+    /*#swagger.parameters['data']={
+      in: 'body',
+      required:'true',
+      schema:{
+        postId: 111
+      }
+    }*/
     const userId: string = req.params.id;
 
     try {
@@ -116,11 +206,21 @@ userRouter.put(
         Number(req.body.postId)
       );
       if (user) {
+        /*#swagger.responses[200] = { 
+        description: 'OK',
+        schema: { $ref: "#/definitions/UserDetail" }   
+        }*/
         return res.status(200).json(user);
       }
 
+      /*#swagger.responses[403] = { 
+        description: 'User not found'
+        }*/
       return res.status(403).json('User not found');
     } catch (err) {
+      /*#swagger.responses[500] = { 
+        description: 'Internal Server Error'  
+      }*/
       return res.status(500).json(err);
     }
   }
@@ -133,6 +233,23 @@ userRouter.put(
   body('friendId').isUUID(),
   isAuthenticated,
   async (req: Request, res: Response) => {
+    //#swagger.tags = ['Users']
+    //#swagger.summary= 'Unfriend user'
+    //#swagger.description= 'Returns extended user object'
+    /*#swagger.parameters['id']={
+      in: 'param',
+      required:'true',
+      type: 'string',
+      description: 'ID of user'
+    }
+
+    #swagger.parameters['data']={
+      in: 'body',
+      required:'true',
+      schema:{
+        friendId: "UUID"
+      }
+    }*/
     const { id, friendId } = req.body;
 
     try {
@@ -143,8 +260,15 @@ userRouter.put(
       const result = friends.friends.concat(
         friends.friendedBy
       );
+      /*#swagger.responses[200] = { 
+        description: 'OK',
+        schema: { $ref: "#/definitions/UserList" }   
+      }*/
       return res.status(200).json(result);
     } catch (err) {
+      /*#swagger.responses[500] = { 
+        description: 'Internal Server Error'  
+      }*/
       return res.status(500).json(err);
     }
   }
@@ -152,17 +276,37 @@ userRouter.put(
 
 //POST: Update User
 //Params username,email,password,profileName
-//#swagger.tags = ['Users']
 userRouter.put(
   '/:id',
-  body('username').isString().optional(),
+  param('id').isString(),
   body('email').isEmail().optional(),
   body('password').isString().optional(),
   body('profileName').isString().optional(),
   isAuthenticated,
   async (req: Request, res: Response) => {
+    //#swagger.tags = ['Users']
+    //#swagger.summary= 'Update user'
+    //#swagger.description= 'Returns extended user object'
+    /*#swagger.parameters['id']={
+      in: 'path',
+      required: 'true',
+      type: 'string',
+      }*/
+
+    /*#swagger.parameters['data']={
+      in: 'body',
+      required: 'false',
+      schema:{
+        email: 'email',
+        password: 'new password',
+        profileName: 'new profile name'
+      }
+    }*/
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      /*#swagger.responses[400] = { 
+        description: 'Validation error'  
+      }*/
       return res
         .status(400)
         .json({ errors: errors.array() });
@@ -174,24 +318,45 @@ userRouter.put(
         user,
         req.params.id
       );
+      /*#swagger.responses[201] = { 
+        description: 'OK',
+        schema: { $ref: "#/definitions/UserDetail" }   
+      }*/
       return res.status(201).json(updatedUser);
     } catch (err) {
+      /*#swagger.responses[500] = { 
+        description: 'Internal Server Error'  
+      }*/
       return res.status(500).json(err);
     }
   }
 );
 //POST: Delete User
-//#swagger.tags = ['Users']
 userRouter.delete(
   '/:id',
   isAuthenticated,
   async (req: Request, res: Response) => {
+    //#swagger.tags = ['Users']
+    //#swagger.summary= 'Delete user'
+    //#swagger.description= 'Returns extended user object'
+    /*
+    #swagger.parameters['id']={
+      in: 'param'
+      required: 'true',
+      type: string,
+      }*/
     try {
       await UserService.deleteUser(req.params.id);
+      /*#swagger.responses[201] = { 
+        description: 'OK',
+      }*/
       return res
         .status(201)
         .json('User deleted successfully');
     } catch (err) {
+      /*#swagger.responses[500] = { 
+        description: 'Internal Server Error'  
+      }*/
       return res.status(500).json(err);
     }
   }
