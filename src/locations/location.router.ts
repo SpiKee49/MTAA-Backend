@@ -14,6 +14,25 @@ import { isAuthenticated } from '../midlewares';
 export const locationRouter = express.Router();
 
 //GET: all Locations
+//#swagger.tags = ['Locations']
+//#swagger.summary: 'List all locations'
+//#swagger.description: 'Returns a list of all locations, optionally filtered by search term'
+/*#swagger.parameters['search']:{
+  in: query
+    schema:
+      type: string
+    description: 'A search term to filter the list of locations'
+}*/
+/*#swagger.responses[200] = { 
+    description: 'OK'
+    schema: { $ref: "#/definitions/Location" },   
+    }
+*/
+/*#swagger.responses[500] = { 
+    description: 'Internal Server Error'  
+    }
+*/
+//TODO: swagger.security 
 locationRouter.get(
   '/',
   isAuthenticated,
@@ -32,6 +51,29 @@ locationRouter.get(
 );
 
 //GET: Find single Location by it's id
+/*
+  #swagger.tags = ['Locations']
+  #swagger.summary: 'Get location by id'
+  #swagger.description: 'Retrieve an location by its id'
+  #swagger.parameters['id'] = {
+        in: 'path',
+        description: 'Numeric ID of the location to retrieve'
+        required: true,
+        type: 'integer'
+
+  #swagger.responses[200] = { 
+    description: 'The location with the given id'
+    schema: { $ref: "#/definitions/Location" },   
+    }
+
+  #swagger.responses[404] = { 
+    description: 'Location not found' 
+    }
+
+  #swagger.responses[500] = { 
+    description: 'Internal server error'  
+    }
+*/
 locationRouter.get(
   '/:id',
   isAuthenticated,
@@ -54,7 +96,30 @@ locationRouter.get(
 );
 
 //POST: Add Location
-//Params name,longitude, latitude
+//Params name, longitude, latitude
+//#swagger.tags = ['Locations']
+//#swagger.summary: 'Add a new location'
+//#swagger.description: 'Add a new location to the database'
+/*#swagger.parameters['location'] ={
+  in: 'body',
+  description:'Location that is being added',
+  schema: { $ref: "#/definitions/AddLocation" }
+}*/
+/*
+  #swagger.responses[201] = { 
+    description: 'Location created'
+    schema: { $ref: "#/definitions/Location" },   
+    }
+
+  #swagger.responses[400] = { 
+    description: 'Bad Request' 
+    }
+
+  #swagger.responses[500] = { 
+    description: 'Internal server error'  
+    }
+*/
+//TODO: swagger.security
 locationRouter.post(
   '/',
   isAuthenticated,
@@ -81,7 +146,32 @@ locationRouter.post(
 );
 
 //POST: Update Location
-//Params  name,longitude, latitude
+//Params  name, longitude, latitude
+// #swagger.tags = ['Locations'] 
+// #swagger.summary = 'Update an location by ID' 
+// #swagger.description = 'Updates the location with the given ID'
+/* #swagger.parameters['id'] = {
+        in: 'path',
+        description: 'ID of the location to be updated',
+        required: true,
+        type: 'integer'
+} */
+/* #swagger.parameters['Location'] = {
+        in: 'body',
+        description: 'Data to update location',
+        required: true,
+        schema: { $ref: "#/definitions/UpdateLocation" }
+} */
+/*#swagger.responses[201] = { 
+  description: 'Location updated', 
+  schema: { $ref: "#/definitions/Location" },
+  }*/
+/*#swagger.responses[404] = { 
+  description: 'Location not found' 
+  }*/
+/*#swagger.responses[500] = { 
+  description: 'Internal server error'  
+  } */
 locationRouter.put(
   '/:id',
   isAuthenticated,
@@ -108,6 +198,25 @@ locationRouter.put(
 );
 
 //POST: Delete Location
+//#swagger.tags = ['Locations']
+//#swagger.summary = 'Delete an location by ID'
+//#swagger.description = 'Deletes the location with the given ID'
+/*#swagger.parameters['id'] = { 
+  in: 'path', 
+  description: 'ID of location to delete', 
+  required: true, 
+  type: 'integer' 
+} */
+/*#swagger.responses[201] = { 
+  description: 'Location deleted', 
+  schema: { 
+    type: 'string' 
+  } 
+}*/
+/*#swagger.responses[500] = { 
+  description: 'Internal server error'  
+  } */
+//TODO swagger.security
 locationRouter.delete(
   '/:id',
   isAuthenticated,
