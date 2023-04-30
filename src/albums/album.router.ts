@@ -101,7 +101,7 @@ albumRouter.post(
     //#swagger.tags = ['Albums']
     //#swagger.summary = 'Add a new album'
     //#swagger.description = 'Add a new album to the database'
-    /*#swagger.parameters['Album'] ={
+    /*#swagger.parameters['album'] ={
       in: 'body',
       description:'album that is being added',
       schema: { $ref: "#/definitions/AddAlbum" }
@@ -153,7 +153,7 @@ albumRouter.put(
         required: true,
         type: 'integer'
     } */
-    /* #swagger.parameters['Album'] = {
+    /* #swagger.parameters['album'] = {
         in: 'body',
         description: 'Data to update album',
         required: true,

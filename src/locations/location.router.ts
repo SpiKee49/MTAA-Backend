@@ -100,7 +100,7 @@ locationRouter.post(
     //#swagger.tags = ['Locations']
     //#swagger.summary = 'Add a new location'
     //#swagger.description = 'Add a new location to the database'
-    /*#swagger.parameters['Location'] ={
+    /*#swagger.parameters['location'] ={
       in: 'body',
       description:'Location that is being added',
       schema: { $ref: "#/definitions/AddLocation" }
@@ -153,7 +153,7 @@ locationRouter.put(
       required: true,
       type: 'integer'
     } */
-    /* #swagger.parameters['Location'] = {
+    /* #swagger.parameters['location'] = {
       in: 'body',
       description: 'Data to update location',
       required: true,
