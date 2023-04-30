@@ -42,6 +42,7 @@ albumRouter.get(
       /*#swagger.responses[500] = { 
       description: 'Internal Server Error'  
       }*/
+
       return res.status(500).json(err);
     }
   }
@@ -87,8 +88,6 @@ albumRouter.get(
 );
 
 //POST: Add Album
-
-//TODO: swagger.security
 albumRouter.post(
   '/',
   isAuthenticated,
