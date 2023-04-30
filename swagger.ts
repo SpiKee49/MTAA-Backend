@@ -41,9 +41,19 @@ const doc = {
       name: 'Tokens',
       description: 'Tokens api',
     },
+    {
+      name: 'Authentication',
+      description: 'Authentication api'
+    }
   ],
   securityDefinitions: {},
   definitions: {
+    AddNewUser: {
+      $username: 'SomeName',
+      $profileName: 'Dude 1',
+      $email: 'thisIsTheemail@gmail.com',
+      $password: 'SomeGoodpassword123',
+    },
     User: {
       id: '152521515',
       username: 'SomeName',

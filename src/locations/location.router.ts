@@ -34,7 +34,7 @@ locationRouter.get(
         );
       /*#swagger.responses[200] = { 
       description: 'OK',
-      schema: { $ref: "#/definitions/Location" }   
+      schema: { $ref: "#/definitions/LocationList" }   
       }*/
       return res.status(200).json(locations);
     } catch (err) {
