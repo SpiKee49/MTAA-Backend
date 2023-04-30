@@ -13,7 +13,8 @@ import { postRouter } from './posts/post.router';
 import { requestRouter } from './requests/request.router';
 import { tokenRouter } from './tokens/token.router';
 import { userRouter } from './users/user.router';
-const swaggerFile = require('./swagger_output.json');
+
+const swaggerFile = require('../swagger_output.json');
 
 dotenv.config();
 
@@ -109,9 +110,13 @@ server.on('request', app);
 
 //swagger middleware for documentation
 app.use(
-  '/api/documentation',
+  '/documentation',
   swaggerUi.serve,
   swaggerUi.setup(swaggerFile)
+);
+
+app.listen(PORT, () =>
+  console.log(`App listening on port ${PORT}!`)
 );
 
 // app.listen(PORT, () =>
