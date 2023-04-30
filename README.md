@@ -1,5 +1,5 @@
 # Adding features
-**Create new branche from `master` when adding new features or changes, then create pull request and ask for code review**
+**Create new branch from `master` when adding new features or changes, then create pull request and ask for code review**
 
 
 ## Running project for the first time
