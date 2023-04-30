@@ -82,6 +82,12 @@ app.use('/api/auth', authRouter);
 app.use('/api/requests', requestRouter);
 app.use('/api/tokens', tokenRouter);
 
+//swagger middleware for documentation
+app.use(
+  '/documentation',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerFile)
+);
 // app.listen(PORT, () =>
 //   console.log(`App listening on port ${PORT}!`)
 // );
