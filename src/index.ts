@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv';
 
 import { Expo, ExpoPushToken } from 'expo-server-sdk';
 
+import { WebSocketServer } from 'ws';
 import { albumRouter } from './albums/album.router';
 import { authRouter } from './auth/auth.router';
 import cors from 'cors';
@@ -69,7 +70,7 @@ app.use((_req, res, next) => {
 
   next();
 });
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 app.use('/api/users', userRouter);
 app.use('/api/locations', locationRouter);
 app.use('/api/albums', albumRouter);
@@ -78,6 +79,34 @@ app.use('/api/auth', authRouter);
 app.use('/api/requests', requestRouter);
 app.use('/api/tokens', tokenRouter);
 
-app.listen(PORT, () =>
-  console.log(`App listening on port ${PORT}!`)
-);
+// app.listen(PORT, () =>
+//   console.log(`App listening on port ${PORT}!`)
+// );
+let server = require('http').createServer();
+const wss = new WebSocketServer({
+  server: server,
+  perMessageDeflate: false,
+});
+
+wss.on('connection', function connection(ws) {
+  console.log('[i]Connection to WS server established...');
+  ws.on('error', console.error);
+  ws.on('message', function message(data) {
+    wss.clients.forEach(function each(client) {
+      if (
+        client !== ws &&
+        client.readyState === WebSocket.OPEN
+      ) {
+        client.send('update');
+      }
+    });
+  });
+});
+
+server.on('request', app);
+
+server.listen(PORT, () => {
+  console.log(
+    'Express and WS servers listening on port ' + PORT
+  );
+});

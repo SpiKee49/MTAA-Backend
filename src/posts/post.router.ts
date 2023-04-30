@@ -80,8 +80,11 @@ postRouter.post(
     }
 
     try {
-      const post = req.body;
-      const newPost = await PostServices.addPost(post);
+      const { photo, ...post } = req.body;
+      const newPost = await PostServices.addPost({
+        ...post,
+        photo: Buffer.from(photo, 'base64'),
+      });
       const tokens = await getAllTokens();
       if (newPost !== undefined && tokens.length > 0) {
         sendPushNotifications(
@@ -89,8 +92,11 @@ postRouter.post(
           tokens.map(item => item.token)
         );
       }
-
-      return res.status(201).json(newPost);
+      const transform = newPost.photo.toString('base64');
+      return res.status(201).json({
+        ...newPost,
+        photo: transform,
+      });
     } catch (err) {
       return res.status(500).json(err);
     }

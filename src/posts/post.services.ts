@@ -41,10 +41,12 @@ export const addPost = async (
   return db.post.create({
     data: {
       ...post,
-      photo: Buffer.from(
-        '/9j/4AAQSkZJRgABAQEASABIAAD/',
-        'utf-8'
-      ),
+      photo:
+        post.photo ??
+        Buffer.from(
+          '/9j/4AAQSkZJRgABAQEASABIAAD/',
+          'base64'
+        ),
     },
     include: { album: true },
   });
