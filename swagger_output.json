@@ -363,6 +363,10 @@
     },
     "/api/locations/": {
       "get": {
+        "tags": [
+          "Locations"
+        ],
+        "summary": "List all locations",
         "description": "",
         "parameters": [
           {
@@ -378,7 +382,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Location"
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -392,8 +399,8 @@
         "tags": [
           "Locations"
         ],
-        "summary": "",
-        "description": "",
+        "summary": "Add a new location",
+        "description": "Add a new location to the database",
         "parameters": [
           {
             "name": "authorization",
@@ -401,7 +408,7 @@
             "type": "string"
           },
           {
-            "name": "location",
+            "name": "Location",
             "in": "body",
             "description": "Location that is being added",
             "schema": {
@@ -433,14 +440,15 @@
         "tags": [
           "Locations"
         ],
-        "summary": "",
-        "description": "",
+        "summary": "Get location by id",
+        "description": "Retrieve an location by its id",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "description": "Numeric ID of the location to retrieve"
           },
           {
             "name": "authorization",
@@ -450,16 +458,19 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "The location with the given id",
+            "schema": {
+              "$ref": "#/definitions/Location"
+            }
           },
           "401": {
             "description": "Unauthorized"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Location not found"
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal server error"
           }
         }
       },
@@ -535,25 +546,13 @@
         ],
         "responses": {
           "201": {
-            "description": "Location deleted",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "string"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
+            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -563,8 +562,8 @@
         "tags": [
           "Albums"
         ],
-        "summary": "",
-        "description": "",
+        "summary": "List all albums",
+        "description": "Returns a list of all albums, optionally filtered by search term",
         "parameters": [
           {
             "name": "search",
@@ -579,7 +578,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Album"
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -593,8 +595,8 @@
         "tags": [
           "Albums"
         ],
-        "summary": "",
-        "description": "",
+        "summary": "Add a new album",
+        "description": "Add a new album to the database",
         "parameters": [
           {
             "name": "authorization",
@@ -631,8 +633,8 @@
         "tags": [
           "Albums"
         ],
-        "summary": "",
-        "description": "",
+        "summary": "Get album by id",
+        "description": "Retrieve an album by its id",
         "parameters": [
           {
             "name": "id",
