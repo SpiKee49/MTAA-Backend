@@ -40,8 +40,17 @@ albumRouter.get(
       const albums = await AlbumServices.listAllAlbums(
         req.query.search?.toString()
       );
+      /*#swagger.responses[200] = { 
+    description: 'OK'
+    schema: { $ref: "#/definitions/Album" },   
+    }
+*/
       return res.status(200).json(albums);
     } catch (err) {
+      /*#swagger.responses[500] = { 
+    description: 'Internal Server Error'  
+    }
+*/
       return res.status(500).json(err);
     }
   }
@@ -92,8 +101,6 @@ albumRouter.get(
 );
 
 //POST: Add Album
-
-//TODO: swagger.security
 albumRouter.post(
   '/',
   isAuthenticated,

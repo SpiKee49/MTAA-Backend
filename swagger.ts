@@ -45,7 +45,19 @@ const doc = {
       username: 'SomeName',
       profileName: 'Dude 1',
       email: 'thisIsTheemail@gmail.com',
-      password: 'userPassword',
+    },
+    UserList: [{ $ref: '#/definitions/User' }],
+    UserDetail: {
+      id: '152521515',
+      username: 'SomeName',
+      profileName: 'Dude 1',
+      email: 'thisIsTheemail@gmail.com',
+      followedAlbums: { $ref: '#/definitions/AlbumList' },
+      ownedAlbums: { $ref: '#/definitions/AlbumList' },
+      friends: { $ref: '#/definitions/UserList' },
+      friendedBy: { $ref: '#/definitions/UserList' },
+      likedPost: { $ref: '#/definitions/PostList' },
+      posts: { $ref: '#/definitions/PostList' },
     },
     Location: {
       id: 152,
@@ -53,6 +65,7 @@ const doc = {
       longitude: '49.19658843800614',
       latitude: '20.213747396503443',
     },
+    LocationList: [{ $ref: '#/definitions/Location' }],
     AddLocation: {
       $name: 'Tesco Lamač Bratislava',
       $longitude: '48.17677398662877',
@@ -71,6 +84,7 @@ const doc = {
       ownerId: '152521515',
       tags: ['leto', 'more', 'relax'],
     },
+    AlbumList: [{ $ref: '#/definitions/Album' }],
     AddAlbum: {
       $title: 'Novy rok nove ja',
       description:
@@ -96,6 +110,31 @@ const doc = {
       userId: '152521515',
       albumId: 111,
       locationId: 145,
+    },
+    PostDetail: {
+      id: 15,
+      title: 'Potapanie sa',
+      photo: Buffer.from(
+        '/9j/4AAQSkZJRgABAQEASABIAAD/',
+        'utf-8'
+      ),
+      description: 'Nie vsetky dobre veci su napovrchu',
+      userId: '152521515',
+      albumId: 111,
+      locationId: 145,
+      location: { $ref: '#/definitions/Location' },
+      album: { $ref: '#/definitions/Album' },
+      user: { $ref: '#/definitions/User' },
+      likedBy: [{ $ref: '#/definitions/User' }],
+    },
+    PostList: [{ $ref: '#/definitions/Post' }],
+    AddPost: {
+      $title: 'Potapanie sa',
+      $photo: 'Base64String',
+      description: 'Nie vsetky dobre veci su napovrchu',
+      $userId: '152521515',
+      $albumId: 111,
+      $locationId: 145,
     },
     Request: {
       id: 12,
