@@ -143,15 +143,36 @@ export const followAlbum = async (
   id: string,
   albumId: number
 ): Promise<Omit<User, 'password'>> => {
+  const user = await db.user.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      followedAlbums: true,
+    },
+  });
+  const alreadyFollowing =
+    user?.followedAlbums
+      .map(item => item.id)
+      .includes(albumId) ?? false;
+
   return db.user.update({
     where: {
       id,
     },
     data: {
       followedAlbums: {
-        connect: {
-          id: albumId,
-        },
+        ...(!alreadyFollowing
+          ? {
+              connect: {
+                id: albumId,
+              },
+            }
+          : {
+              disconnect: {
+                id: albumId,
+              },
+            }),
       },
     },
     include: {

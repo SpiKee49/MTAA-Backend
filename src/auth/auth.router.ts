@@ -32,7 +32,7 @@ authRouter.post(
     //#swagger.tags = ['Authentication']
     //#swagger.summary = 'Register a new user.'
     //#swagger.description = 'User registration.'
-    /*#swagger.parameters['newUser'] = {
+    /*#swagger.parameters['data'] = {
       in: 'body',
       description: 'User details for registration.',
       required: true,
@@ -76,7 +76,7 @@ authRouter.post(
       /*#swagger.responses[200] = {
         schema: {
           refreshToken: { $ref: "#/definitions/Token" },
-          hashedToken: { $ref: "#/definitions/Token" }
+          accessToken: { $ref: "#/definitions/Token" }
         },
         description: 'Access token and refresh token for the newly registered user.'
       } */
@@ -103,17 +103,14 @@ authRouter.post(
     //#swagger.tags = ['Authentication']
     //#swagger.summary = 'Login to the application'
     //#swagger.description = 'Logs in to an existing user and returns access and refresh tokens.'
-    /*#swagger.parameters['username'] ={
+    /*#swagger.parameters['data'] ={
         in: 'body',
         description: 'Write there your Username',
         required: 'true',
-        schema: { username: 'someUsername' }
-    } */
-    /*#swagger.parameters['password'] ={
-        in: 'body',
-        description: 'Write there your Password',
-        required: 'true',
-        schema: { password: 'somePassword' }
+        schema: { 
+          username: 'someUsername',
+          password: 'somePassword' 
+        }
     } */
     try {
       const { username, password } = req.body;
@@ -159,7 +156,7 @@ authRouter.post(
       /*#swagger.responses[200] = {
         schema: {
           refreshToken: { $ref: "#/definitions/Token" },
-          hashedToken: { $ref: "#/definitions/Token" }
+          accessToken: { $ref: "#/definitions/Token" }
         },
         description: 'Returns access token and refresh token.'
       } */
@@ -255,8 +252,14 @@ authRouter.post(
         newRefreshToken,
         user.id
       );
-
-      res.json({
+      /*#swagger.responses[200] = {
+        schema: {
+          refreshToken: { $ref: "#/definitions/Token" },
+          accessToken: { $ref: "#/definitions/Token" }
+        },
+        description: 'Returns access token and refresh token.'
+      } */
+      res.status(200).json({
         accessToken,
         refreshToken: newRefreshToken,
       });
@@ -272,7 +275,7 @@ authRouter.post(
     //#swagger.tags = ['Authentication']
     //#swagger.summary = 'Revoke refresh tokens for a user'
     //#swagger.description = 'Revokes all the refresh tokens of a user by their userId'
-    /*#swagger.parameter['userID'] ={
+    /*#swagger.parameter['data'] ={
       in: 'body',
       description: 'This API revokes all the refresh tokens of a user by their userId',
       required: 'true',

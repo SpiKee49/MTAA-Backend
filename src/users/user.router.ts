@@ -122,9 +122,9 @@ userRouter.get(
   }
 );
 
-//POST: Follwing new album
+//POST: Following new album
 userRouter.put(
-  '/:id',
+  '/:id/follow',
   param('id').isUUID(),
   body('albumId').isNumeric(),
   isAuthenticated,
